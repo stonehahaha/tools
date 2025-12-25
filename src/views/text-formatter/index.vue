@@ -298,6 +298,7 @@ const copyResult = async () => {
   try {
     await navigator.clipboard.writeText(outputText.value)
     ElMessage.success('已复制到剪贴板')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_err) {
     // 降级方案
     const textarea = document.createElement('textarea')
