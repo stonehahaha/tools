@@ -377,6 +377,7 @@ const processPassengerInfo = () => {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
+    if (line === undefined) continue
 
     // 检查是否是姓名行
     if (namePattern.test(line)) {
@@ -386,12 +387,15 @@ const processPassengerInfo = () => {
       // 在后续行中查找票号，直到遇到下一个姓名或文件末尾
       // 限制查找范围为接下来的 15 行有效数据，防止跨度过大
       for (let j = i + 1; j < Math.min(i + 15, lines.length); j++) {
+        const currentLine = lines[j]
+        if (currentLine === undefined) continue
+
         // 如果遇到了下一个姓名，说明当前旅客的票号可能漏了
-        if (namePattern.test(lines[j])) {
+        if (namePattern.test(currentLine)) {
           break
         }
-        if (passengerNumberPattern.test(lines[j])) {
-          passengerNumber = lines[j]
+        if (passengerNumberPattern.test(currentLine)) {
+          passengerNumber = currentLine
           break
         }
       }
