@@ -1,48 +1,61 @@
-# private-tools
+# Private Tools
 
-This template should help get you started developing with Vue 3 in Vite.
+这是一个为个人和团队设计的纯前端工具集，专注于数据处理效率与隐私安全。所有数据均在浏览器本地处理，绝不上传服务器。
 
-## Recommended IDE Setup
+## 🚀 核心功能
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 1. 日期格式化 (Date Formatter)
 
-## Recommended Browser Setup
+- **多格式识别**：支持识别多种常见的日期输入格式。
+- **标准化输出**：一键转换为标准日期格式，便于后续数据处理。
+- **批量处理**：支持多行日期同时转换。
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 2. 文本格式化 (Text Formatter)
 
-## Type Support for `.vue` Imports in TS
+- **基础清理**：快速去除文本中的空格、换行、特殊符号等。
+- **旅客信息提取 (核心)**：
+  - 专门针对复杂的旅客订单信息进行结构化提取。
+  - 自动识别 **姓名** 与 **票号**。
+  - **Excel 兼容**：输出采用制表符（Tab）分隔，支持直接粘贴至 Excel 单元格。
+  - **智能容错**：支持带有空行、杂乱格式的原始数据输入。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 🛡️ 隐私与安全
 
-## Customize configuration
+- **本地处理**：所有格式化逻辑均在客户端执行。
+- **无追踪**：不记录、不上传任何用户输入的敏感信息。
+- **离线可用**：加载完成后，核心功能可在无网络环境下运行。
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 🛠️ 技术栈
 
-## Project Setup
+- **框架**: Vue 3 (Composition API)
+- **组件库**: Element Plus
+- **构建工具**: Vite
+- **路由**: Vue Router
+- **自动导入**: unplugin-auto-import / unplugin-vue-components
 
-```sh
+## 📦 快速开始
+
+### 安装依赖
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动开发服务器
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### 项目打包
 
-```sh
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 📖 使用指南
 
-```sh
-npm run lint
-```
+1. 通过左侧导航栏选择需要的工具。
+2. 在输入框中粘贴原始数据。
+3. 点击“转换”或相关功能按钮。
+4. 点击“复制结果”即可将处理后的内容粘贴到 Excel 或其他文档中。
