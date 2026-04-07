@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from io import BytesIO
 from pathlib import Path
 from typing import Any
+from zipfile import ZipFile
 
 import pytest
 from fastapi.testclient import TestClient
 
 from server.app import app
-from server.pdf_team_splitter import PdfTeamSplitResult
+from server.pdf_team_splitter import PdfTeamSplitResult, build_result_zip
 
 
 client = TestClient(app)
@@ -30,6 +32,9 @@ def test_successful_upload_returns_zip_and_passes_options(tmp_path: Path, monkey
 
     def fake_process(request: Any) -> PdfTeamSplitResult:
         captured["request"] = request
+        artifact = Path(request.output_dir) / "generated.txt"
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_bytes(b"artifact")
         return PdfTeamSplitResult(
             team_pdf_paths=[tmp_path / "Team_A.pdf"],
             report_path=tmp_path / "report.csv",
@@ -38,11 +43,11 @@ def test_successful_upload_returns_zip_and_passes_options(tmp_path: Path, monkey
 
     monkeypatch.setattr("server.app.process_pdf_team_split", fake_process)
 
+    real_build_result_zip = build_result_zip
+
     def fake_build_result_zip(output_dir: Path | str, zip_path: Path | str) -> Path:
         captured["build_result_zip"] = (Path(output_dir), Path(zip_path))
-        zip_target = Path(zip_path)
-        zip_target.write_bytes(b"ZIP")
-        return zip_target
+        return real_build_result_zip(output_dir, zip_path)
 
     monkeypatch.setattr("server.app.build_result_zip", fake_build_result_zip)
 
@@ -59,7 +64,11 @@ def test_successful_upload_returns_zip_and_passes_options(tmp_path: Path, monkey
 
     assert response.status_code == 200
     assert response.headers["content-type"] == "application/zip"
-    assert response.content == b"ZIP"
+
+    names = ZipFile(BytesIO(response.content)).namelist()
+    assert set(names) == {"generated.txt"}
+    assert "roster.xlsx" not in names
+    assert "input.pdf" not in names
 
     request = captured["request"]
     assert request.sheet == "RosterSheet"
@@ -83,3 +92,19 @@ def test_processing_errors_return_json(monkeypatch: Any) -> None:
 
     assert response.status_code == 400
     assert response.json() == {"message": "bad roster"}
+
+
+def test_invalid_fuzzy_threshold_returns_bad_request(monkeypatch: Any) -> None:
+    def fake_process(_: Any) -> PdfTeamSplitResult:
+        pytest.fail("process should not run for invalid threshold")
+
+    monkeypatch.setattr("server.app.process_pdf_team_split", fake_process)
+
+    response = client.post(
+        "/api/pdf-team-split",
+        files=_test_files(),
+        data={"fuzzy_threshold": "foo"},
+    )
+
+    assert response.status_code == 400
+    assert response.json() == {"message": "Invalid fuzzy_threshold"}

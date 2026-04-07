@@ -45,6 +45,9 @@ async def pdf_team_split(
     working_dir.mkdir(parents=True, exist_ok=True)
     background_tasks.add_task(_cleanup_dir, working_dir)
 
+    output_dir = working_dir / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     roster_path = working_dir / _sanitize_filename(roster.filename, "roster.xlsx")
     pdf_path = working_dir / _sanitize_filename(pdf.filename, "input.pdf")
 
@@ -54,7 +57,7 @@ async def pdf_team_split(
     request_data: dict[str, object] = {
         "roster_path": roster_path,
         "pdf_path": pdf_path,
-        "output_dir": working_dir,
+        "output_dir": output_dir,
     }
 
     if sheet is not None:
@@ -67,7 +70,10 @@ async def pdf_team_split(
         request_data["team_column"] = team_column
 
     if fuzzy_threshold is not None:
-        request_data["fuzzy_threshold"] = int(fuzzy_threshold)
+        try:
+            request_data["fuzzy_threshold"] = int(fuzzy_threshold)
+        except ValueError:
+            return JSONResponse(status_code=400, content={"message": "Invalid fuzzy_threshold"})
 
     try:
         process_pdf_team_split(PdfTeamSplitRequest(**request_data))
@@ -75,5 +81,5 @@ async def pdf_team_split(
         return JSONResponse(status_code=400, content={"message": str(exc)})
 
     zip_path = working_dir / "result.zip"
-    archive_path = build_result_zip(working_dir, zip_path)
+    archive_path = build_result_zip(output_dir, zip_path)
     return FileResponse(archive_path, media_type="application/zip", filename=zip_path.name)
