@@ -1,61 +1,48 @@
-# Private Tools
+ # Private Tools
 
-这是一个为个人和团队设计的纯前端工具集，专注于数据处理效率与隐私安全。所有数据均在浏览器本地处理，绝不上传服务器。
+ This repository hosts two cooperating utilities: a Vue 3/Vite frontend that presents helpers for formatting and PDF splitting, and a Python FastAPI backend that handles roster matching and ZIP generation for the team-split workflow.
 
-## 🚀 核心功能
+ ## Tools
 
-### 1. 日期格式化 (Date Formatter)
+ ### Date Formatter
 
-- **多格式识别**：支持识别多种常见的日期输入格式。
-- **标准化输出**：一键转换为标准日期格式，便于后续数据处理。
-- **批量处理**：支持多行日期同时转换。
+ - Paste or type messy date strings into the composer and get instant conversions across multiple formats (ISO, locale-aware, Excel friendly).
+ - Auto-detect common delimiters, add leading zeros, and normalize time zones so you can copy clean dates into other apps without context switching.
+ - Drop the formatted result back into Excel, a spreadsheet tab, or any clipboard target using the built-in copy buttons.
 
-### 2. 文本格式化 (Text Formatter)
+ ### Text Formatter
 
-- **基础清理**：快速去除文本中的空格、换行、特殊符号等。
-- **旅客信息提取 (核心)**：
-  - 专门针对复杂的旅客订单信息进行结构化提取。
-  - 自动识别 **姓名** 与 **票号**。
-  - **Excel 兼容**：输出采用制表符（Tab）分隔，支持直接粘贴至 Excel 单元格。
-  - **智能容错**：支持带有空行、杂乱格式的原始数据输入。
+ - Highlight and normalize whitespace, add or remove bullets, and break single-line dumps into tidy lists or tables.
+ - Paste notes from a feed or chat, then use the live preview to trim padding, replace repeated separators, and ensure consistent casing before copying.
+ - Includes shortcuts for emoji-safe pasting, forced wrapping, and flagging suspicious characters before you share.
 
-## 🛡️ 隐私与安全
+ ### PDF Team Splitter
 
-- **本地处理**：所有格式化逻辑均在客户端执行。
-- **无追踪**：不记录、不上传任何用户输入的敏感信息。
-- **离线可用**：加载完成后，核心功能可在无网络环境下运行。
+ - The Vue frontend uploads a roster workbook and a PDF to `/api/pdf-team-split`, lets you tweak the sheet/column options, and downloads a ZIP with one file per team.
+ - The FastAPI backend in `server/` peels apart uploads, applies fuzzy matching, and streams the resulting archive back for download.
+ - Frontend and backend both live in this repo so you can iterate locally before deploying to 1Panel, a reverse-proxied archive, or any in-house host.
 
-## 🛠️ 技术栈
+ ## Local development
 
-- **框架**: Vue 3 (Composition API)
-- **组件库**: Element Plus
-- **构建工具**: Vite
-- **路由**: Vue Router
-- **自动导入**: unplugin-auto-import / unplugin-vue-components
+ ### Frontend (Vue 3 + Vite)
 
-## 📦 快速开始
+ 1. `npm install` (or `npm ci` after cloning)
+ 2. `npm run dev` to start the Vite dev server (port 5173 by default)
+ 3. `npm run build` to emit production assets into `dist`
+ 4. `npm run preview -- --host 0.0.0.0 --port 4173` if you want to smoke-test the built bundle locally
 
-### 安装依赖
+ ### Backend (FastAPI)
 
-```bash
-npm install
-```
+ 1. `py -3.12 -m pip install -r server/requirements.txt`
+ 2. `py -3.12 -m uvicorn server.app:app --reload --host 0.0.0.0 --port 8000`
+ 3. Point the frontend at `http://localhost:8000/api` when you need to call the team-split service.
+ 4. Run `py -3.12 -m pytest server/tests -v` after installing dependencies to keep the validation suite green.
 
-### 启动开发服务器
+ ## Verification
 
-```bash
-npm run dev
-```
+ Run the following commands before shipping changes:
 
-### 项目打包
-
-```bash
-npm run build
-```
-
-## 📖 使用指南
-
-1. 通过左侧导航栏选择需要的工具。
-2. 在输入框中粘贴原始数据。
-3. 点击“转换”或相关功能按钮。
-4. 点击“复制结果”即可将处理后的内容粘贴到 Excel 或其他文档中。
+ - `py -3.12 -m pytest server/tests -v`
+ - `npm run test`
+ - `npm run type-check`
+ - `npm run build`
