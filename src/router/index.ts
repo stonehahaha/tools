@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-rou
 
 export const Layout = () => import('@/layout/index.vue')
 
-// constantRoutes
+// 静态路由
 export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -14,7 +14,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/text-formatter/index.vue'),
         name: 'TextFormatter',
         meta: {
-          title: '鏂囨湰鏁寸悊',
+          title: '文本整理',
           icon: 'List',
         },
       },
@@ -31,7 +31,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   },
 ]
 
-// Create router
+// 创建路由
 const router = createRouter({
   history: createWebHashHistory(),
   routes: constantRoutes,

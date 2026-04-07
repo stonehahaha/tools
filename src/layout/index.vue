@@ -6,12 +6,12 @@ import { MagicStick, List, Document } from '@element-plus/icons-vue'
 const router = useRouter()
 const route = useRoute()
 
-// 妯℃嫙浠?constantRoutes 涓彁鍙栭渶瑕佹樉绀虹殑鑿滃崟
+// 模拟从 constantRoutes 中提取需要显示的菜单
 const menuItems = [
   {
     path: '/text-formatter',
     name: 'TextFormatter',
-    title: '鏂囨湰鏁寸悊',
+    title: '文本整理',
     icon: List,
   },
   {
@@ -31,22 +31,22 @@ const handleSelect = (path: string) => {
 
 <template>
   <div class="layout">
-    <!-- 椤堕儴鍝佺墝鍖?-->
+    <!-- 顶部品牌区 -->
     <div class="topbar">
       <div class="brand">
         <div class="brand-icon">
           <el-icon size="24"><MagicStick /></el-icon>
         </div>
         <div class="brand-text">
-          <h1>鏁版嵁鏍煎紡杞崲</h1>
-          <p>蹇€熷鐞喡峰畨鍏ㄩ珮鏁?/p>
+          <h1>数据格式转换</h1>
+          <p>快速处理·安全高效</p>
         </div>
       </div>
     </div>
 
-    <!-- 涓诲唴瀹瑰尯 -->
+    <!-- 主内容区 -->
     <div class="main-content">
-      <!-- 宸︿晶渚ц竟鏍忓鑸?-->
+      <!-- 左侧侧边栏导航 -->
       <div class="sidebar">
         <div class="sidebar-tabs">
           <button
@@ -67,12 +67,12 @@ const handleSelect = (path: string) => {
                 <circle cx="8" cy="8" r="6" fill="currentColor" />
               </svg>
             </el-icon>
-            <span>绾墠绔鐞喡锋暟鎹笉绂诲紑鎮ㄧ殑娴忚鍣?/span>
+            <span>纯前端处理·数据不离开您的浏览器</span>
           </div>
         </div>
       </div>
 
-      <!-- 鍙充晶宸ヤ綔鍖?-->
+      <!-- 右侧工作区 -->
       <div class="work-area">
         <router-view />
       </div>
