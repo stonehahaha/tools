@@ -24,7 +24,7 @@ The frontend service simply emits static assets; the Nginx container forwards br
 
 1. **Base image**: Use a Python 3.12 image in 1Panel so the `py` launcher is available.
 2. **Install step**: `py -3.12 -m pip install -r server/requirements.txt`.
-3. **Run command**: `py -3.12 -m uvicorn server.app:app --host 0.0.0.0 --port ${PORT:-8000}`.
+3. **Run command**: `py -3.12 -m uvicorn server.app:app --host 0.0.0.0 --port ${PORT:-8001}`.
 4. **Storage**: The FastAPI code writes to `server/tmp`. Bind a persistent (or at least writeable) volume if you want to inspect uploads between restarts, otherwise the default ephemeral storage works.
 5. **Environment**: No secrets are needed by default, but you can inject `LOG_LEVEL`, `UVICORN_WORKERS`, or `TMP_ROOT` overrides if your deployment demands it.
 
@@ -39,11 +39,11 @@ server {
   listen 80;
   server_name _;
 
-  location /api/ {
-    proxy_pass http://backend:8000/api/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_read_timeout 120s;
+location /api/ {
+  proxy_pass http://backend:8001/api/;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_read_timeout 120s;
     client_max_body_size 200M;
   }
 

@@ -1,48 +1,44 @@
- # Private Tools
+# Private Tools
 
- This repository hosts two cooperating utilities: a Vue 3/Vite frontend that presents helpers for formatting and PDF splitting, and a Python FastAPI backend that handles roster matching and ZIP generation for the team-split workflow.
+这个仓库包含一个 `Vue 3 + Vite` 前端工具站，以及一个用于 PDF 团队行程整理的 `FastAPI` 后端。
 
- ## Tools
+## 工具列表
 
- ### Date Formatter
+### 文本整理
 
- - Paste or type messy date strings into the composer and get instant conversions across multiple formats (ISO, locale-aware, Excel friendly).
- - Auto-detect common delimiters, add leading zeros, and normalize time zones so you can copy clean dates into other apps without context switching.
- - Drop the formatted result back into Excel, a spreadsheet tab, or any clipboard target using the built-in copy buttons.
+- 浏览器本地提取旅客信息
+- 从旅客订单文本中提取姓名与乘客号
+- 输出可直接复制到 Excel 的制表符格式
 
- ### Text Formatter
+### PDF 行程整理
 
- - Highlight and normalize whitespace, add or remove bullets, and break single-line dumps into tidy lists or tables.
- - Paste notes from a feed or chat, then use the live preview to trim padding, replace repeated separators, and ensure consistent casing before copying.
- - Includes shortcuts for emoji-safe pasting, forced wrapping, and flagging suspicious characters before you share.
+- 上传人员表和 PDF
+- 服务端按团队拆分行程单
+- 返回一个 `zip`，其中包含团队 PDF 和 `match_report.csv`
 
- ### PDF Team Splitter
+## 本地开发
 
- - The Vue frontend uploads a roster workbook and a PDF to `/api/pdf-team-split`, lets you tweak the sheet/column options, and downloads a ZIP with one file per team.
- - The FastAPI backend in `server/` peels apart uploads, applies fuzzy matching, and streams the resulting archive back for download.
- - Frontend and backend both live in this repo so you can iterate locally before deploying to 1Panel, a reverse-proxied archive, or any in-house host.
+### 前端
 
- ## Local development
+```bash
+npm install
+npm run dev
+```
 
- ### Frontend (Vue 3 + Vite)
+### 后端
 
- 1. `npm install` (or `npm ci` after cloning)
- 2. `npm run dev` to start the Vite dev server (port 5173 by default)
- 3. `npm run build` to emit production assets into `dist`
- 4. `npm run preview -- --host 0.0.0.0 --port 4173` if you want to smoke-test the built bundle locally
+```bash
+py -3.12 -m pip install -r server/requirements.txt
+py -3.12 -m uvicorn server.app:app --host 127.0.0.1 --port 8001
+```
 
- ### Backend (FastAPI)
+前端开发代理会把 `/api` 请求转发到 `http://127.0.0.1:8001`。
 
- 1. `py -3.12 -m pip install -r server/requirements.txt`
- 2. `py -3.12 -m uvicorn server.app:app --reload --host 0.0.0.0 --port 8000`
- 3. Point the frontend at `http://localhost:8000/api` when you need to call the team-split service.
- 4. Run `py -3.12 -m pytest server/tests -v` after installing dependencies to keep the validation suite green.
+## 验证命令
 
- ## Verification
-
- Run the following commands before shipping changes:
-
- - `py -3.12 -m pytest server/tests -v`
- - `npm run test`
- - `npm run type-check`
- - `npm run build`
+```bash
+py -3.12 -m pytest server/tests -v
+npm run test
+npm run type-check
+npm run build
+```
