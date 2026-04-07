@@ -38,7 +38,7 @@ export const downloadPdfTeamSplitResult = (blob: Blob, filename?: string) => {
   const objectUrl = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = objectUrl
-  link.download = filename ?? 'pdf-team-split-result.pdf'
+  link.download = filename ?? 'pdf-team-split-result.zip'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

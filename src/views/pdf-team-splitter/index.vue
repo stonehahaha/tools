@@ -157,6 +157,12 @@ const handleFileChange = (event: Event, setter: (file: File | null) => void) => 
 const handleRosterChange = (event: Event) => handleFileChange(event, (file) => (rosterFile.value = file))
 const handlePdfChange = (event: Event) => handleFileChange(event, (file) => (pdfFile.value = file))
 
+const appendOptionalFields = (formData: FormData) => {
+  formData.append('name_column', nameColumn.value)
+  formData.append('team_column', teamColumn.value)
+  formData.append('fuzzy_threshold', String(fuzzyThreshold.value))
+}
+
 const submitSplit = async () => {
   if (!canSubmit.value) {
     ElMessage.warning('请先上传名册与 PDF 文件。')
@@ -167,14 +173,12 @@ const submitSplit = async () => {
   formData.append('roster', rosterFile.value as File)
   formData.append('pdf', pdfFile.value as File)
   formData.append('sheet', String(sheet.value))
-  formData.append('nameColumn', nameColumn.value)
-  formData.append('teamColumn', teamColumn.value)
-  formData.append('fuzzyThreshold', String(fuzzyThreshold.value))
+  appendOptionalFields(formData)
 
   loading.value = true
   try {
     const blob = await requestPdfTeamSplit(formData)
-    downloadPdfTeamSplitResult(blob, 'pdf-team-split-result.pdf')
+    downloadPdfTeamSplitResult(blob, 'pdf-team-split-result.zip')
     ElMessage.success('拆分成功，文件正在下载。')
   } catch (error) {
     const message = error instanceof Error ? error.message : 'PDF 行程整理失败，请稍后再试。'

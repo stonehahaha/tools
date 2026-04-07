@@ -80,8 +80,11 @@ describe('PdfTeamSplitterView', () => {
     const formData = requestSpy.mock.calls[0][0] as FormData
     expect(formData.get('roster')).toBe(rosterFile)
     expect(formData.get('pdf')).toBe(pdfFile)
+    expect(formData.get('name_column')).toBe('B')
+    expect(formData.get('team_column')).toBe('C')
+    expect(formData.get('fuzzy_threshold')).toBe('80')
 
     expect(downloadSpy).toHaveBeenCalledTimes(1)
-    expect(downloadSpy).toHaveBeenCalledWith(blob, 'pdf-team-split-result.pdf')
+    expect(downloadSpy).toHaveBeenCalledWith(blob, 'pdf-team-split-result.zip')
   })
 })
