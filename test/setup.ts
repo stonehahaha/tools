@@ -1,43 +1,38 @@
 import { beforeEach, vi } from 'vitest'
 
-if (typeof window.matchMedia !== 'function') {
-  window.matchMedia = (query: string) => ({
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: () => undefined,
-    removeListener: () => undefined,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-    dispatchEvent: () => false,
-  })
-}
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+})
 
-if (!window.navigator.clipboard) {
-  Object.defineProperty(window.navigator, 'clipboard', {
-    value: {
-      writeText: async () => undefined,
-    },
-    configurable: true,
-  })
-}
+Object.defineProperty(navigator, 'clipboard', {
+  configurable: true,
+  value: {
+    writeText: vi.fn().mockResolvedValue(undefined),
+  },
+})
 
-class ResizeObserverStub {
+class ResizeObserverMock {
   observe() {}
+
   unobserve() {}
+
   disconnect() {}
 }
 
-if (typeof window.ResizeObserver === 'undefined') {
-  window.ResizeObserver = ResizeObserverStub
-}
-
-if (!window.scrollTo) {
-  window.scrollTo = () => undefined
-}
+vi.stubGlobal('ResizeObserver', ResizeObserverMock)
+vi.stubGlobal('scrollTo', vi.fn())
 
 beforeEach(() => {
   localStorage.clear()
-  vi.resetAllMocks()
-  vi.restoreAllMocks()
+  vi.clearAllMocks()
 })

@@ -1,17 +1,19 @@
-import { mergeConfig } from 'vite'
-import baseViteConfig from './vite.config'
-import { defineConfig } from 'vitest/config'
+import { defineConfig, mergeConfig } from 'vitest/config'
 
-const vitestConfig = mergeConfig(baseViteConfig, {
-  test: {
-    environment: 'jsdom',
-    globals: true,
-    setupFiles: ['./test/setup.ts'],
-    deps: {
-      inline: ['element-plus', '@element-plus/icons-vue'],
+import viteConfig from './vite.config'
+
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      setupFiles: './test/setup.ts',
+      server: {
+        deps: {
+          inline: ['element-plus', '@element-plus/icons-vue'],
+        },
+      },
     },
-    passWithNoTests: true,
-  },
-})
-
-export default defineConfig(vitestConfig)
+  }),
+)
