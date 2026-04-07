@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { MagicStick, List } from '@element-plus/icons-vue'
+import { MagicStick, List, Document } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
 
-// 模拟从 constantRoutes 中提取需要显示的菜单
+// 妯℃嫙浠?constantRoutes 涓彁鍙栭渶瑕佹樉绀虹殑鑿滃崟
 const menuItems = [
   {
     path: '/text-formatter',
     name: 'TextFormatter',
-    title: '文本整理',
+    title: '鏂囨湰鏁寸悊',
     icon: List,
+  },
+  {
+    path: '/pdf-team-splitter',
+    name: 'PdfTeamSplitter',
+    title: 'PDF 行程整理',
+    icon: Document,
   },
 ]
 
@@ -25,22 +31,22 @@ const handleSelect = (path: string) => {
 
 <template>
   <div class="layout">
-    <!-- 顶部品牌区 -->
+    <!-- 椤堕儴鍝佺墝鍖?-->
     <div class="topbar">
       <div class="brand">
         <div class="brand-icon">
           <el-icon size="24"><MagicStick /></el-icon>
         </div>
         <div class="brand-text">
-          <h1>数据格式转换</h1>
-          <p>快速处理·安全高效</p>
+          <h1>鏁版嵁鏍煎紡杞崲</h1>
+          <p>蹇€熷鐞喡峰畨鍏ㄩ珮鏁?/p>
         </div>
       </div>
     </div>
 
-    <!-- 主内容区 -->
+    <!-- 涓诲唴瀹瑰尯 -->
     <div class="main-content">
-      <!-- 左侧侧边栏导航 -->
+      <!-- 宸︿晶渚ц竟鏍忓鑸?-->
       <div class="sidebar">
         <div class="sidebar-tabs">
           <button
@@ -61,12 +67,12 @@ const handleSelect = (path: string) => {
                 <circle cx="8" cy="8" r="6" fill="currentColor" />
               </svg>
             </el-icon>
-            <span>纯前端处理·数据不离开您的浏览器</span>
+            <span>绾墠绔鐞喡锋暟鎹笉绂诲紑鎮ㄧ殑娴忚鍣?/span>
           </div>
         </div>
       </div>
 
-      <!-- 右侧工作区 -->
+      <!-- 鍙充晶宸ヤ綔鍖?-->
       <div class="work-area">
         <router-view />
       </div>

@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-rou
 
 export const Layout = () => import('@/layout/index.vue')
 
-// 静态路由
+// constantRoutes
 export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -14,15 +14,24 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/text-formatter/index.vue'),
         name: 'TextFormatter',
         meta: {
-          title: '文本整理',
+          title: '鏂囨湰鏁寸悊',
           icon: 'List',
+        },
+      },
+      {
+        path: 'pdf-team-splitter',
+        component: () => import('@/views/pdf-team-splitter/index.vue'),
+        name: 'PdfTeamSplitter',
+        meta: {
+          title: 'PDF 行程整理',
+          icon: 'Document',
         },
       },
     ],
   },
 ]
 
-// 创建路由
+// Create router
 const router = createRouter({
   history: createWebHashHistory(),
   routes: constantRoutes,
