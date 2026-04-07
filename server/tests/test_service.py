@@ -138,3 +138,18 @@ def test_process_pdf_team_split_passes_request_options(tmp_path: Path, monkeypat
     write_report_args = captured["write_report"]
     assert write_report_args[0] == match_results.report_rows
     assert write_report_args[1].name == "match_report.csv"
+
+
+def test_build_result_zip_skips_zip_inside_output(tmp_path: Path) -> None:
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+
+    (output_dir / "data.txt").write_text("data")
+    zip_path = output_dir / "archive.zip"
+
+    service.build_result_zip(output_dir, zip_path)
+
+    with zipfile.ZipFile(zip_path) as archive:
+        contents = set(archive.namelist())
+
+    assert "archive.zip" not in contents

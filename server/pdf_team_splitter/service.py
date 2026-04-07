@@ -87,6 +87,8 @@ def build_result_zip(output_dir: Path | str, zip_path: Path | str) -> Path:
 
     with ZipFile(zip_file_path, "w", compression=ZIP_DEFLATED) as archive:
         for file_path in _iter_files(output_directory):
+            if file_path == zip_file_path:
+                continue
             archive.write(file_path, file_path.relative_to(output_directory))
 
     return zip_file_path
