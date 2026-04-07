@@ -37,3 +37,9 @@ __screenshots__/
 
 # Git worktrees
 .worktrees/
+
+__pycache__/
+*.pyc
+server/.venv/
+server/.pytest_cache/
+server/tmp/

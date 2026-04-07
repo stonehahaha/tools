@@ -7,17 +7,8 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/date-formatter',
+    redirect: '/text-formatter',
     children: [
-      {
-        path: 'date-formatter',
-        component: () => import('@/views/date-formatter/index.vue'),
-        name: 'DateFormatter',
-        meta: {
-          title: '日期转换',
-          icon: 'Calendar',
-        },
-      },
       {
         path: 'text-formatter',
         component: () => import('@/views/text-formatter/index.vue'),
@@ -25,6 +16,15 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: {
           title: '文本整理',
           icon: 'List',
+        },
+      },
+      {
+        path: 'pdf-team-splitter',
+        component: () => import('@/views/pdf-team-splitter/index.vue'),
+        name: 'PdfTeamSplitter',
+        meta: {
+          title: 'PDF 行程整理',
+          icon: 'Document',
         },
       },
     ],

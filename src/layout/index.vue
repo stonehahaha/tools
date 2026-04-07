@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { MagicStick, Calendar, List } from '@element-plus/icons-vue'
+import { MagicStick, List, Document } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -9,17 +9,17 @@ const route = useRoute()
 // 模拟从 constantRoutes 中提取需要显示的菜单
 const menuItems = [
   {
-    path: '/date-formatter',
-    name: 'DateFormatter',
-    title: '日期转换',
-    icon: Calendar
-  },
-  {
     path: '/text-formatter',
     name: 'TextFormatter',
     title: '文本整理',
-    icon: List
-  }
+    icon: List,
+  },
+  {
+    path: '/pdf-team-splitter',
+    name: 'PdfTeamSplitter',
+    title: 'PDF 行程整理',
+    icon: Document,
+  },
 ]
 
 const activePath = computed(() => route.path)
