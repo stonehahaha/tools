@@ -23,6 +23,18 @@ def _sanitize_filename(filename: str | None, fallback: str) -> str:
     return Path(filename or fallback).name
 
 
+def _parse_sheet_value(sheet: str | None) -> str | int | None:
+    if sheet is None:
+        return None
+
+    normalized = sheet.strip()
+    if not normalized:
+        return None
+    if normalized.isdigit():
+        return int(normalized)
+    return normalized
+
+
 async def _save_upload(upload: UploadFile, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("wb") as file_obj:
@@ -60,8 +72,9 @@ async def pdf_team_split(
         "output_dir": output_dir,
     }
 
-    if sheet is not None:
-        request_data["sheet"] = sheet
+    parsed_sheet = _parse_sheet_value(sheet)
+    if parsed_sheet is not None:
+        request_data["sheet"] = parsed_sheet
 
     if name_column is not None:
         request_data["name_column"] = name_column

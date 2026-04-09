@@ -48,21 +48,16 @@
         <div class="optional-section">
           <div class="section-header">
             <h3>可选参数</h3>
-            <p>默认配置适用大多数表格，只有在匹配错误时再调整。</p>
+            <p>默认直接读取第一个工作表，并按常见表头“姓名 / 团队”匹配；只有在表头不一致时再调整。</p>
           </div>
           <div class="form-grid">
             <div class="form-cell">
-              <label>页签索引</label>
-              <el-input-number v-model="sheet" :min="0" controls-position="right" />
-              <p class="hint">从 0 开始，0 代表第一个表格页签。</p>
+              <label>姓名表头</label>
+              <el-input v-model="nameColumn" placeholder="例如 姓名" />
             </div>
             <div class="form-cell">
-              <label>姓名列</label>
-              <el-input v-model="nameColumn" placeholder="例如 B" />
-            </div>
-            <div class="form-cell">
-              <label>团体列</label>
-              <el-input v-model="teamColumn" placeholder="例如 C" />
+              <label>团体表头</label>
+              <el-input v-model="teamColumn" placeholder="例如 团队" />
             </div>
             <div class="form-cell">
               <label>模糊匹配阈值</label>
@@ -109,7 +104,7 @@
               <div class="step-number">3</div>
               <div class="step-content">
                 <h4>调整参数</h4>
-                <p>当默认列号无效时，通过可选参数修改姓名/团体列或阈值。</p>
+                <p>当默认表头不一致时，通过可选参数填写实际表头名称或调整阈值。</p>
               </div>
             </div>
             <div class="guide-step">
@@ -139,9 +134,8 @@ import { downloadPdfTeamSplitResult, requestPdfTeamSplit } from '@/api/pdfTeamSp
 
 const rosterFile = ref<File | null>(null)
 const pdfFile = ref<File | null>(null)
-const sheet = ref(0)
-const nameColumn = ref('B')
-const teamColumn = ref('C')
+const nameColumn = ref('姓名')
+const teamColumn = ref('团队')
 const fuzzyThreshold = ref(80)
 const loading = ref(false)
 
@@ -172,7 +166,6 @@ const submitSplit = async () => {
   const formData = new FormData()
   formData.append('roster', rosterFile.value as File)
   formData.append('pdf', pdfFile.value as File)
-  formData.append('sheet', String(sheet.value))
   appendOptionalFields(formData)
 
   loading.value = true

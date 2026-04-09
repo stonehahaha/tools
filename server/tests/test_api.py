@@ -55,7 +55,7 @@ def test_successful_upload_returns_zip_and_passes_options(tmp_path: Path, monkey
         "/api/pdf-team-split",
         files=_test_files(),
         data={
-            "sheet": "RosterSheet",
+            "sheet": "0",
             "name_column": "NameColumn",
             "team_column": "TeamColumn",
             "fuzzy_threshold": "35",
@@ -71,7 +71,7 @@ def test_successful_upload_returns_zip_and_passes_options(tmp_path: Path, monkey
     assert "input.pdf" not in names
 
     request = captured["request"]
-    assert request.sheet == "RosterSheet"
+    assert request.sheet == 0
     assert request.name_column == "NameColumn"
     assert request.team_column == "TeamColumn"
     assert isinstance(request.fuzzy_threshold, int)

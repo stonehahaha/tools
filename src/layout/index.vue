@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { MagicStick, List, Document } from '@element-plus/icons-vue'
+import { List, Document } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
+const brandIconUrl = '/favicon-data-processing.svg'
 
 // 模拟从 constantRoutes 中提取需要显示的菜单
 const menuItems = [
@@ -35,10 +36,14 @@ const handleSelect = (path: string) => {
     <div class="topbar">
       <div class="brand">
         <div class="brand-icon">
-          <el-icon size="24"><MagicStick /></el-icon>
+          <img
+            data-testid="brand-mark"
+            :src="brandIconUrl"
+            alt="数据处理"
+          >
         </div>
         <div class="brand-text">
-          <h1>数据格式转换</h1>
+          <h1>数据处理</h1>
           <p>快速处理·安全高效</p>
         </div>
       </div>
@@ -67,7 +72,7 @@ const handleSelect = (path: string) => {
                 <circle cx="8" cy="8" r="6" fill="currentColor" />
               </svg>
             </el-icon>
-            <span>纯前端处理·数据不离开您的浏览器</span>
+            <span>文本整理功能纯前端处理数据不离开您的浏览器</span>
           </div>
         </div>
       </div>
@@ -106,12 +111,15 @@ const handleSelect = (path: string) => {
 .brand-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+}
+
+.brand-icon img {
+  width: 40px;
+  height: 40px;
+  display: block;
 }
 
 .brand-text h1 {
